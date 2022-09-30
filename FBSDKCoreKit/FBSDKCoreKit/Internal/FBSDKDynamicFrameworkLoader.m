@@ -129,10 +129,14 @@ _fbsdkdfl_handle_get_impl_(Security)
   return fbsdkdfl_SFSafariViewControllerClass();
 }
 
+#if !FBSDK_IDFA_DISALLOWED
+
 - (Class)asIdentifierManagerClass
 {
   return fbsdkdfl_ASIdentifierManagerClass();
 }
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 #define _fbsdkdfl_Security_get_k(SYMBOL) _fbsdkdfl_symbol_get_k(Security, SYMBOL, CFTypeRef *)
 
@@ -308,6 +312,8 @@ CATransform3D fbsdkdfl_CATransform3DConcat(CATransform3D a, CATransform3D b)
 
 #pragma mark - Ad Support Classes
 
+#if !FBSDK_IDFA_DISALLOWED
+
 _fbsdkdfl_load_framework_once_impl_(AdSupport)
 _fbsdkdfl_handle_get_impl_(AdSupport)
 
@@ -318,6 +324,8 @@ Class fbsdkdfl_ASIdentifierManagerClass(void)
   _fbsdkdfl_AdSupport_get_c(ASIdentifierManager);
   return c;
 }
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 #pragma mark - Safari Services
 _fbsdkdfl_load_framework_once_impl_(SafariServices)

@@ -18,7 +18,11 @@
 
 #import "FBSDKAppEventsUtility.h"
 
+#if !FBSDK_IDFA_DISALLOWED
+
 #import <AdSupport/AdSupport.h>
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 #import <objc/runtime.h>
 
@@ -41,7 +45,12 @@
 #define FBSDK_APPEVENTSUTILITY_MAX_IDENTIFIER_LENGTH 40
 
 static NSArray<NSString *> *standardEvents;
+
+#if !FBSDK_IDFA_DISALLOWED
+
 static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 @implementation FBSDKAppEventsUtility
 
@@ -180,10 +189,16 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
     }
   }
 
+#if FBSDK_IDFA_DISALLOWED
+  return nil;
+#else // FBSDK_IDFA_DISALLOWED
   ASIdentifierManager *manager = [self _asIdentifierManagerWithShouldUseCachedManager:shouldUseCachedManager
                                                              dynamicFrameworkResolver:dynamicFrameworkResolver];
   return manager.advertisingIdentifier.UUIDString;
+#endif // !FBSDK_IDFA_DISALLOWED
 }
+
+#if !FBSDK_IDFA_DISALLOWED
 
 - (ASIdentifierManager *)_asIdentifierManagerWithShouldUseCachedManager:(BOOL)shouldUseCachedManager
                                                dynamicFrameworkResolver:(id<FBSDKDynamicFrameworkResolving>)dynamicFrameworkResolver
@@ -201,6 +216,8 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
   }
   return manager;
 }
+
+#endif // FBSDK_IDFA_DISALLOWED
 
 + (BOOL)isStandardEvent:(nullable NSString *)event
 {
@@ -473,6 +490,7 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
 
 #if DEBUG
  #if FBTEST
+  #if !FBSDK_IDFA_DISALLOWED
 
 + (ASIdentifierManager *)cachedAdvertiserIdentifierManager
 {
@@ -484,7 +502,8 @@ static ASIdentifierManager *_cachedAdvertiserIdentifierManager;
   _cachedAdvertiserIdentifierManager = manager;
 }
 
- #endif
-#endif
+  #endif // !FBSDK_IDFA_DISALLOWED
+ #endif // FBTEST
+#endif // DEBUG
 
 @end

@@ -25,7 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol FBSDKDynamicFrameworkResolving <NSObject>
 
 - (nullable Class)safariViewControllerClass;
+
+#if !FBSDK_IDFA_DISALLOWED
+
 - (nullable Class)asIdentifierManagerClass;
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 @end
 

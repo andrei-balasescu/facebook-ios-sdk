@@ -18,7 +18,11 @@
 
 #import "FBSDKSettings+Internal.h"
 
+#if !FBSDK_IDFA_DISALLOWED
+
 #import <AdSupport/AdSupport.h>
+
+#endif // !FBSDK_IDFA_DISALLOWED
 
 #import "FBSDKAppEventsConfigurationProtocol.h"
 #import "FBSDKAppEventsConfigurationProviding.h"
@@ -327,7 +331,11 @@ FBSDKSETTINGS_PLIST_CONFIGURATION_SETTING_IMPL(
     return self.advertiserTrackingStatusBacking.unsignedIntegerValue;
   } else {
     // @lint-ignore CLANGTIDY
+#if FBSDK_IDFA_DISALLOWED
+    return FBSDKAdvertisingTrackingDisallowed;
+#else // FBSDK_IDFA_DISALLOWED
     return ASIdentifierManager.sharedManager.advertisingTrackingEnabled ? FBSDKAdvertisingTrackingAllowed : FBSDKAdvertisingTrackingDisallowed;
+#endif // !FBSDK_IDFA_DISALLOWED
   }
 }
 
